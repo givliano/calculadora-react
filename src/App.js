@@ -40,14 +40,14 @@ class App extends React.Component {
 
   operatorHandler = (e) => {
     const operator = e.target.value;
-    if (!this.state.number2) {
+    if (!this.state.number2 && this.state.equal === false) {
       this.setState((prevState) =>  ({ 
         number2: prevState.number,
         number: '',
         operator
        }));
      } else if (this.state.equal) {
-      this.setState((prevState) => ({ number: prevState.result, result: '', equal: false }))
+      this.setState((prevState) => ({ operator, number2: prevState.result, result: '', equal: false }))
     } 
     else {
       this.setState({ operator })
