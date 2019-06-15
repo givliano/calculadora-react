@@ -8,9 +8,12 @@ class App extends React.Component {
       number2: '',
       operator: '',
       result: '',
-      equal: false
+      equal: false,
+      displayStatus: ''
     };
   };
+
+  round = (x) => (Number.parseFloat(x).toFixed(4));
 
   clearHandler = () => {
     this.setState({
@@ -18,7 +21,8 @@ class App extends React.Component {
       number2: '',
       operator: '',
       result: '',
-      equal: false
+      equal: false,
+      displayStatus: ''
     });
   };
 
@@ -30,21 +34,35 @@ class App extends React.Component {
 
   numberHandler = (e) => {
     const number = e.target.value;
-    if (this.state.number === '0') {
-     return null 
+    if (this.state.number === '0' && number === '0') {
+     return null;
     } else if (this.state.result && !this.state.number) {
       this.clearHandler();
+    } else if (this.state.number.length === 12) {
+      this.setState(() => ({ displayStatus: 'sm-size' }))
+     
+    } else if (this.state.number.length >= 18) {
+      this.setState(() => ({ displayStatus: 's-size' }))
+     
+    } if (this.state.number.length === 24) {
+      return null;
     }
-    this.setState((prevState) => ({ number: prevState.number.concat(number) }));
+    
+     this.setState((prevState) => ({ number: prevState.number.concat(number) }));
   }
+    
 
   operatorHandler = (e) => {
     const operator = e.target.value;
+    if (!this.state.number && !this.state.result) {
+      return null;
+    }
     if (!this.state.number2 && this.state.equal === false) {
       this.setState((prevState) =>  ({ 
         number2: prevState.number,
         number: '',
-        operator
+        operator,
+        displayStatus: ''
        }));
      } else if (this.state.equal) {
       this.setState((prevState) => ({ operator, number2: prevState.result, result: '', equal: false }))
@@ -58,31 +76,43 @@ class App extends React.Component {
     const operator = this.state.operator;
     switch (operator) {
       case '÷':
-        this.setState((prevState) => ({ result: +prevState.number2 / +prevState.number, equal: true, number: '', number2: '' }));
+        var num = (+this.round(+this.state.number2 / +this.state.number)).toString();
+        this.setState(() => ({ result: num, equal: true, number: '', number2: '' }));
         break;
       case '×':
-        this.setState((prevState) => ({ result: +prevState.number2 * +prevState.number, equal: true, number: '', number2: '' }));
+          var num = (+this.round(+this.state.number2 * +this.state.number)).toString();
+        this.setState(() => ({ result: num, equal: true, number: '', number2: '' }));
         break;
       case '-':
-        this.setState((prevState) => ({ result: +prevState.number2 - +prevState.number, equal: true, number: '', number2: '' }));
+        var num = (+this.round(+this.state.number2 - +this.state.number)).toString();
+        this.setState(() => ({ result: num, equal: true, number: '', number2: '' }));
         break;
       case '+':
-        this.setState((prevState) => ({ result: +prevState.number2 + +prevState.number, equal: true, number: '', number2: '' }));
+          var num = (+this.round(+this.state.number2 + +this.state.number)).toString();
+        this.setState(() => ({ result: num, equal: true, number: '', number2: '' }));
         break;
       default:
         return null;
     };
   };
 
+  percentageHandler = () => {
+    this.setState(() => ({ number: (this.state.number / 100).toString() }));
+  };
+
+  plusMinusHandler = () => {
+    this.setState(() => ({ number: (this.state.number * -1).toString() }));
+  };
+
   render() {
     return (
       <div className="container">
         <div className="calculator">
-          <div id="display">{this.state.result? this.state.result : this.state.number}</div>
+          <div id="display"><p className="display-operator">{this.state.operator}</p><p className={`display-number ${this.state.displayStatus}`}>{this.state.result? this.state.result : this.state.number}</p></div>
           <div className="keypad">
             <button id="clear" onClick={this.clearHandler}>C</button>
-            <button id="plus-minus">±</button>
-            <button id="percentage">%</button>
+            <button id="plus-minus" onClick={this.plusMinusHandler}>±</button>
+            <button id="percentage" onClick={this.percentageHandler}>%</button>
             <button id="divide" value="÷" onClick={this.operatorHandler}>÷</button>
             <button id="seven" value="7" onClick={this.numberHandler}>7</button>
             <button id="eight" value="8" onClick={this.numberHandler}>8</button>
