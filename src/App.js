@@ -76,20 +76,20 @@ class App extends React.Component {
     const operator = this.state.operator;
     switch (operator) {
       case '÷':
-        var num = (+this.round(+this.state.number2 / +this.state.number)).toString();
-        this.setState(() => ({ result: num, equal: true, number: '', number2: '' }));
+        const num1 = (+this.round(+this.state.number2 / +this.state.number)).toString();
+        this.setState(() => ({ result: num1, equal: true, number: '', number2: '' }));
         break;
       case '×':
-          var num = (+this.round(+this.state.number2 * +this.state.number)).toString();
-        this.setState(() => ({ result: num, equal: true, number: '', number2: '' }));
+        const num2 = (+this.round(+this.state.number2 * +this.state.number)).toString();
+        this.setState(() => ({ result: num2, equal: true, number: '', number2: '' }));
         break;
       case '-':
-        var num = (+this.round(+this.state.number2 - +this.state.number)).toString();
-        this.setState(() => ({ result: num, equal: true, number: '', number2: '' }));
+        const num3 = (+this.round(+this.state.number2 - +this.state.number)).toString();
+        this.setState(() => ({ result: num3, equal: true, number: '', number2: '' }));
         break;
       case '+':
-          var num = (+this.round(+this.state.number2 + +this.state.number)).toString();
-        this.setState(() => ({ result: num, equal: true, number: '', number2: '' }));
+        const num4 = (+this.round(+this.state.number2 + +this.state.number)).toString();
+        this.setState(() => ({ result: num4, equal: true, number: '', number2: '' }));
         break;
       default:
         return null;
@@ -97,18 +97,24 @@ class App extends React.Component {
   };
 
   percentageHandler = () => {
-    this.setState(() => ({ number: (this.state.number / 100).toString() }));
+    this.setState(() => ({ number: (this.round((this.state.number / 100))).toString() }));
   };
 
   plusMinusHandler = () => {
-    this.setState(() => ({ number: (this.state.number * -1).toString() }));
+    this.setState(() => ({ number: (this.round((this.state.number * -1))).toString() }));
   };
 
   render() {
     return (
       <div className="container">
         <div className="calculator">
-          <div id="display"><p className="display-operator">{this.state.operator}</p><p className={`display-number ${this.state.displayStatus}`}>{this.state.result? this.state.result : this.state.number}</p></div>
+          <div id="display">
+            <p 
+              className={`display-number ${this.state.displayStatus}`}
+            >
+              {this.state.result? this.state.result : this.state.number}
+            </p>
+          </div>
           <div className="keypad">
             <button id="clear" onClick={this.clearHandler}>C</button>
             <button id="plus-minus" onClick={this.plusMinusHandler}>±</button>
