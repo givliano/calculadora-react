@@ -38,12 +38,10 @@ class App extends React.Component {
      return null;
     } else if (this.state.result && !this.state.number) {
       this.clearHandler();
-    } else if (this.state.number.length === 12) {
-      this.setState(() => ({ displayStatus: 'sm-size' }))
-     
+    } else if (this.state.number.length >= 12) {
+      this.setState(() => ({ displayStatus: 'sm-size' }));
     } else if (this.state.number.length >= 18) {
-      this.setState(() => ({ displayStatus: 's-size' }))
-     
+      this.setState(() => ({ displayStatus: 's-size' }));
     } if (this.state.number.length === 24) {
       return null;
     }
@@ -54,10 +52,10 @@ class App extends React.Component {
 
   operatorHandler = (e) => {
     const operator = e.target.value;
-    if (!this.state.number && !this.state.result) {
-      return null;
-    }
-    if (!this.state.number2 && this.state.equal === false) {
+    // if (!this.state.number && !this.state.result) {
+    //   return null;
+    // }
+    if (!this.state.number2 && !this.state.equal) {
       this.setState((prevState) =>  ({ 
         number2: prevState.number,
         number: '',
@@ -66,8 +64,7 @@ class App extends React.Component {
        }));
      } else if (this.state.equal) {
       this.setState((prevState) => ({ operator, number2: prevState.result, result: '', equal: false }))
-    } 
-    else {
+    } else {
       this.setState({ operator })
     };
   };
@@ -97,11 +94,16 @@ class App extends React.Component {
   };
 
   percentageHandler = () => {
-    this.setState(() => ({ number: (this.round((this.state.number / 100))).toString() }));
+    this.setState(() => (
+      { 
+        number: ((this.state.number || this.state.result) / 100).toString(),
+        result: '',
+        equal: false
+      }));
   };
 
   plusMinusHandler = () => {
-    this.setState(() => ({ number: (this.round((this.state.number * -1))).toString() }));
+    this.setState(() => ({ number: (this.state.number * -1).toString() }));
   };
 
   render() {
@@ -141,5 +143,6 @@ class App extends React.Component {
     );
   };
 };
+
 
 export default App;
